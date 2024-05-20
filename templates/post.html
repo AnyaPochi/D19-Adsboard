@@ -1,0 +1,36 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Объявление
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все товары -->
+{% block content %}
+    <h3>{{ time_now|date:'d M Y' }}</h3>
+    <hr>
+   {% if posts %}
+       <table>
+           <tr>
+               <td>Заголовок</td>
+               <td>Автор</td>
+               <td>Категория</td>
+               <td>Дата</td>
+               <td>Описание</td>
+           </tr>
+
+
+           <tr>
+               <td>{{ posts.title}}</td>
+               <td>{{ posts.author}}</td>
+               <td>{{ posts.category}}</td>
+               <td>{{ posts.time_in|date:'d M Y' }}</td>
+               <td>{{ posts.description}}</td>
+
+           </tr>
+
+       </table>
+
+   {% endif %}
+
+{% endblock content %}
