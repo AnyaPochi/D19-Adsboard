@@ -1,44 +1,29 @@
-         <!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
 
-
-
-{% load i18n %}
-
 {% block title %}
- Объявления
+  Объявления
 {% endblock title %}
 
-<!-- В контенте на странице мы выводим все статьи -->
 {% block content %}
-    <h1>Все объявления</h1>
-    <h3>{{ time_now|date:'d M Y' }}</h3>
-    <h3> {{ posts|length }} </h3>
+  <h1>Объявления:</h1>
+  <p><a href="{% url 'my_list' %}">Откликнувшиеся</a> | <a href="{% url 'post_create' %}">Создать новое объявление</a></p>
+
+  <hr>
+  <hr>
+
+  {% if post_list %}
+  {% for post in post_list %}
+    <h3><a href="{% url 'post' post.id %}">{{ post.title }}</a>( {{ post.respond_set.all|length }}:Отклика)</h3>
+    <p>Автор: {{ post.author.email }}</p>
     <hr>
+  {% endfor %}
+  {% else %}
+    <h2>"Нет Объявлений!"</h2>
+  {% endif %}
+
+{% endblock content %}
 
 
-   {% if posts %}
-       <table>
-           <tr>
-               <td>Заголовок</td>
-               <td>Дата</td>
-               <td>Описание</td>
-               <td>Категория</td>
-           </tr>
-
-
-           {% for post in posts %}
-           <tr>
-               <td>{{ post.title }}</td>
-               <td>{{ post.time_in|date:'d M Y' }}</td>
-               <td>{{ post.description|truncatechars:15 }}</td>
-               <td>{{ post.category}}</td>
-           </tr>
-           {% endfor %}
-
-       </table>
-
-   {% endif %}
 
    {# Добавляем пагинацию на страницу #}
 
@@ -62,5 +47,3 @@
            <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
        {% endif %}
    {% endif %}
-
-{% endblock content %}

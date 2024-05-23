@@ -1,0 +1,36 @@
+{% extends 'flatpages/default.html' %}
+{% block title %}
+  Объявление
+{% endblock title %}
+
+
+{% block content %}
+
+  <h1>{{ post.title }}</h1>
+  <p>
+    Автор: {{ post.author|capfirst }} | Дата создания: {{ post.time_in|date:'d M Y'}}
+    {% if request.user == post.author %}
+    <a href="/posts/{{ post.pk }}/update/">Редактировать</a>
+    |
+    <a href="/posts/{{ post.pk }}/delete/">Удалить</a>
+    {% endif %}
+  </p>
+  <p>Категория: {{ post.category }}</p>
+  <hr>
+  <p>{{ post.mediaoforder|safe }}</p>
+  <hr><hr>
+  <p><a href="/posts/{{ post.pk }}/respond_create/">Откликнуться</a></p>
+      <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save" />
+      <hr>
+    </form>
+  {% for respond in post.respond_set.all %}
+    <h3>Отклик от {{ respond.author|capfirst }}</h3>
+    <p>{{ respond.text }}</p>
+    <hr>
+  {% endfor %}
+
+
+{% endblock content %}

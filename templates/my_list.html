@@ -1,0 +1,51 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+  Объявления
+{% endblock title %}
+
+{% block content %}
+  <h1>Объявления:</h1>
+  <p><a href="{% url 'post_create' %}">Создать новое объявление</a></p>
+
+<!--  <hr>-->
+<!--    <form action="" method="get">-->
+<!--      {{ filterset.form.as_p }}-->
+<!--      <input type="submit" value=Найти />-->
+<!--    </form>-->
+<!--  <hr>-->
+
+  {% if all_respond %}
+  {% for respond in all_respond %}
+    {% if respond.accepted == None or respond.accepted %}
+
+      <h2>
+        Автор: {{ respond.author.username|capfirst }}
+        <small>({{ respond.time_in|date:'d M Y' }})</small>
+      </h2>
+
+      <p>Текст: {{ respond.text }}</p>
+
+      <p>Отклик на объявление: <a href="{% url 'post' respond.post.pk %}">{{ respond.post.title }}</a></p>
+
+      {% if respond.accepted == None %}
+      <form action="" method="post">
+         {% csrf_token %}
+        <fieldset> <legend><b>Принять отклик?</b></legend>
+        <label><input type="radio" name="respond" value='{{ respond.pk }} 1'> да</label>
+        <label><input type="radio" name="respond" value='{{ respond.pk }} 0'> нет</label>
+        </fieldset>
+        <p><input type="submit"></p>
+      </form>
+      {% endif %}
+      <hr>
+
+    {% endif %}
+
+
+  {% endfor %}
+  {% else %}
+    <h1>"Вы не написали ни одного объявления"</h1>
+  {% endif %}
+
+{% endblock content %}
